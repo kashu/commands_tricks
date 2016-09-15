@@ -347,7 +347,26 @@ ffmpeg -i 2.mkv -c:a copy -vf ass="h3\ \[KH\]_Maid_in_Heaven_02\ \(h264\)_\[B43F
 （注：这样生成出来的视频体积较小，视频画质方面是否会有明显的降低，生成后请和原始视频仔细对比，自己权衡。个人觉得，画面颜色深度有些降低）
 （注：ass=后面跟的文件名路径如果有空格等特殊符号，一定要用\转义）
 
+六、视频的缩放（补充 ）
+Scale filter调整分辨率
+Scale filter的优点是可以使用一些额外的参数
+语法：
+Scale=width:height[:interl={1|-1}]
+下表列出了常用的额外参数
+举例
+下面两条命令有相同效果
+ffmpeg -i input.mpg -s 320x240 output.mp4 
+ffmpeg -i input.mpg -vf scale=320:240 output.mp4
+ 
+对输入视频成比例缩放
+改变为源视频一半大小
+ffmpeg -i input.mpg -vf scale=iw/2:ih/2 output.mp4
+改变为原视频的90%大小：
+ffmpeg -i input.mpg -vf scale=iw*0.9:ih*0.9 output.mp4
 
+参数 scale=853:480 当中的宽度和高度实际应用场景中通常只需指定一个，比如指定高度为 480 或者 720，至于宽度则可以传入 “-1” 表示由原始视频的宽高比自动计算而得。即参数可以写为：scale=-1:480，当然也可以 scale=480:-1
+ffmpeg -i 4.mp4 -c:a copy -c:v libx264 -preset ultrafast -vf scale=iw*0.5:ih*0.5 4.720p.mp4
+ffmpeg -i 4.mp4 -c:a copy -c:v libx264 -preset ultrafast -vf scale=-1:ih*0.4 4.0.4.mp4
 
 
    我们在将多种格式的视频转换成flv格式的时候，我们关注的就是转换后的flv视频的品质和大小。下面就自己的实践所得来和大家分享一下，主要针对avi、3gp、mp4和wmv四种格式来进行分析。通常在使用ffmpeg进行视频转换的时候我们使用到的控制音视频的主要参数有如下：
